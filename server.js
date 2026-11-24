@@ -1,0 +1,24 @@
+import dns from "node:dns";
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
+import express from "express";
+import dotenv from "dotenv"
+import dbConnection from "./config/dbConfig.js";
+
+dotenv.config()
+
+const app = express()
+const databaseConnected = await dbConnection()
+
+const PORT = process.env.PORT || 5000
+
+app.get('/health',(req,res)=>{
+    res.json({
+        status:200,
+        databaseConnected:databaseConnected,
+        message:"SERVER IS RUNNING.."
+    })
+})
+
+app.listen(PORT,() => console.log(`SERVER IS RUNNING AT ${PORT}`))
